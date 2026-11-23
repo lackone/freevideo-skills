@@ -1,0 +1,2 @@
+# freevideo-skills 仅使用 Python 3.10+ 标准库，无第三方运行时依赖。
+# 无需 pip install；此文件保留给打包与审计工具识别。

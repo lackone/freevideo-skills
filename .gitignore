@@ -1,0 +1,19 @@
+# Local secrets
+.env
+token
+*.token
+
+# Python virtual environments and caches
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local generation state / downloaded media (keep the source clean)
+freevideo-output/
+output/
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.webp
