@@ -82,6 +82,16 @@ compatibility: Python 3（仅标准库，无需安装依赖）+ 可达的 FreeVi
 
 `--token-path` 仅在发现失败时手动覆盖；脚本已自动走完 2–4。
 
+## 落盘目录（硬规则）
+
+产物统一进 `images/`，按以下优先级唯一确定，取第一个可用项：
+
+1. 用户明确指定的目录下的 `images/`；
+2. 项目目录下的 `images/`；
+3. 都没有时，当前会话目录下的 `images/`。
+
+脚本默认只按当前工作目录拼 `images/`，因此调度方选定目录后应把 `images/` 的绝对路径传给 `--output-dir`，不依赖运行时 cwd。
+
 ## 运行
 
 ```bash
@@ -97,7 +107,7 @@ python "scripts/freevideo_image.py" --prompt "<原生提示词 + 润色改写>"
 - `--tier high`（约 16 MP，更慢；默认 `standard`）
 - `--model`：可选 `minimax-h3-image`（默认）/ `qwen-image-2.1-turbo`
 - `--label <2-8 字>`（任务卡片短名）
-- `--output-dir <目录>`（默认进程当前工作目录，其下 `freevideo-output/images`）
+- `--output-dir <目录>`（默认当前工作目录下 `images/`，调用方应传绝对路径）
 
 脚本自动发现并读 token（不打印），提交 `kind:image`，轮询 `GET /jobs/{id}?wait=25` 至终态，下载结果；stdout 只打印本地绝对路径，进度/错误走 stderr。缺/空 token、发现失败、服务不可达、HTTP 4xx/5xx、响应异常、任务失败、900s 超时、下载为空或非图片、写盘失败，均输出一句中文错误并退出码 1。
 

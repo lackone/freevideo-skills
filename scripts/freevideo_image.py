@@ -9,7 +9,8 @@ Settings come from command-line flags, otherwise defaults. Token and service
 address are auto-discovered when unset.
   --origin      service address, default http://127.0.0.1:8188
   --token-path  explicit override for the agent token file
-  --output-dir  output root; images go to <root>/freevideo-output/images
+  --output-dir  directory for the final image, default <cwd>/images
+                (relative to the current working directory; prefer an absolute path)
 """
 import argparse
 import datetime
@@ -61,8 +62,8 @@ BASE = ORIGIN + "/freevideo/agent/v1"
 
 
 def default_output():
-    """Resolve output dir at runtime so it follows the current workspace/session."""
-    return pathlib.Path.cwd() / "freevideo-output" / "images"
+    """Default output dir: <cwd>/images, so the caller's working dir decides where it lands."""
+    return pathlib.Path.cwd() / "images"
 
 
 RETRIES = 2
@@ -194,7 +195,7 @@ def main():
     ap.add_argument("--tier", default="standard", choices=["standard", "high"])
     ap.add_argument("--model", default="minimax-h3-image", choices=["minimax-h3-image", "qwen-image-2.1-turbo"])
     ap.add_argument("--label", default="")
-    ap.add_argument("--output-dir", default=str(default_output()))
+    ap.add_argument("--output-dir", default=str(default_output()), help="保存目录（默认 当前工作目录/images；调用方应传绝对路径）")
     ap.add_argument("--origin", default=None, help="FreeVideo 服务地址，默认 http://127.0.0.1:8188")
     ap.add_argument("--token-path", default=None, help="显式指定 agent token 文件路径（可选覆盖）")
     args = ap.parse_args()
@@ -259,7 +260,7 @@ def main():
     out_file = pathlib.Path(args.output_dir) / stem
     size = download(url_path, token, out_file)
     log("saved %d bytes" % size)
-    print(str(out_file))
+    print(str(out_file.resolve()))
 
 
 if __name__ == "__main__":

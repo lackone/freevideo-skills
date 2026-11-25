@@ -10,8 +10,8 @@ __pycache__/
 *.pyo
 
 # Local generation state / downloaded media (keep the source clean)
-freevideo-output/
-output/
+images/
+videos/
 *.mp4
 *.jpg
 *.jpeg

@@ -41,7 +41,7 @@ token 文件与服务地址默认由脚本通过服务发现自动获取：先 `
 |---|---|---|
 | `--origin` | FreeVideo 服务地址 | `http://127.0.0.1:8188` |
 | `--token-path` | 显式指定 token 文件路径（可选覆盖） | 服务发现自动获取 |
-| `--output-dir` | 输出根目录，其下建 `freevideo-output/images` | 进程当前工作目录 |
+| `--output-dir` | 成片保存目录 | 当前工作目录下的 `images/` |
 
 ## 运行
 
@@ -57,7 +57,7 @@ python "scripts/freevideo_image.py" --prompt "<原生提示词 + 润色改写>"
 - `--tier high`（约 16 MP，更慢；默认 `standard`）
 - `--model`：可选 `minimax-h3-image`（默认）/ `qwen-image-2.1-turbo`
 - `--label <2-8 字>`（任务卡片短名）
-- `--output-dir <目录>`（覆盖默认输出目录）
+- `--output-dir <目录>`（默认当前工作目录下的 `images/`，调用方应传绝对路径）
 
 提示词硬上限 2000 字符（原文+改写合计，按 Python `len()` 计），脚本提交前校验，超限报中文错误。
 
@@ -65,7 +65,7 @@ python "scripts/freevideo_image.py" --prompt "<原生提示词 + 润色改写>"
 
 - 成功时 stdout 只打印一行成片本地绝对路径；进度与错误走 stderr。
 - 原样返回，不裁切、缩放、调色、修图或转格式；瑕疵由用户自行判断。
-- 交付目录只保留生成的图片，日志、临时文件不随包分发。
+- `images/` 下只保留生成的成片，日志、临时文件交付后即删，不随包分发。
 
 ## 错误处理
 
